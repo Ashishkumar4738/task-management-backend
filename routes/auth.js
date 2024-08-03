@@ -8,14 +8,15 @@ import jwt from "jsonwebtoken"
 import { body, validationResult } from "express-validator";
 const router = express.Router();
 
-router.post("/login",
+router.post("/signin",
     body("email").isEmail(),
-    body("password").isLength({ min: 6, message: "password should be minimum 6 length long" }), async (req, res) => {
+    body("password").isLength({ min: 6, message: "password should be minimum 6 length long" }),
+    async (req, res) => {
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             // Return validation errors if there are any
-            return res.status(400).send({ errors: errors.array() });
+            return res.status(400).send({ errors: errors.errors });
         }
         try {
             const { email, password } = req.body;
@@ -37,7 +38,7 @@ router.post("/login",
                 };
                 const jwtToken = jwt.sign(data, process.env.JWT_SECRET);
                 res.status(201).send(
-                    { message: "Account found successfully", jwtToken }
+                    {success:true, message: "Account found successfully", jwtToken, name:user.name}
                 )
             }
         } catch (error) {
@@ -46,7 +47,7 @@ router.post("/login",
     });
 
 
-router.post("/signin", 
+router.post("/signup", 
     body("email").isEmail(),
     body("password").isLength({ min: 6, message: "password should be minimum 6 length long" }),
     body("name").isLength({min:3,message:"name should have min 3 characters"}),
@@ -54,12 +55,12 @@ router.post("/signin",
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             // Return validation errors if there are any
-            return res.status(400).json({ errors: errors.array() });
+            console.log(errors.errors);
+            return res.status(400).json({ errors: errors.errors });
         }
         try {
             // here we destructure all data
             const { name, email, password, address } = req.body;
-
             const user = await SignIn.findOne({ email });
 
             if (user) {

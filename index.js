@@ -18,6 +18,6 @@ app.get("/",(req,res)=>{
     res.send("Welcome to api");
 })
 
-app.listen((5000),(req,res)=>{
-    console.log("server started at port 5000");
+app.listen((process.env.PORT || 5000),(req,res)=>{
+    console.log(`server started at port ${process.env.PORT||5000} `);
 })

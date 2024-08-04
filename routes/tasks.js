@@ -41,7 +41,7 @@ router.post("/createtask",
             catchMessage(res, "Server side error when creating task", 500, error);
             return;
         }
-});
+    });
 
 router.get("/fetchalltasks", fetchUser, async (req, res) => {
     const user = req.user;
@@ -54,7 +54,7 @@ router.get("/fetchalltasks", fetchUser, async (req, res) => {
             return;
         }
 
-        res.status(201).send({ success: true, message: "List fetched successfully", task: user.Task });
+        res.status(201).send({ success: true, message: "List fetched successfully", task: user.Task, name: user.name });
         return;
 
 
@@ -113,16 +113,18 @@ router.put("/updateexistingtask", fetchUser, async (req, res) => {
         }
 
         const { title, description, status, dueStatus } = req.body;
-        if (title) {
+        if (title.length>1) {
             user.Task.id(taskId).title = title;
         }
-        if (description) {
+        if (description.length>1) {
             user.Task.id(taskId).description = description;
         }
         if (status) {
             user.Task.id(taskId).status = status;
+        }else{
+            user.Task.id(taskId).status = false;
         }
-        if (dueStatus) {
+        if (dueStatus.length>1) {
             user.Task.id(taskId).dueStatus = dueStatus;
         }
 
@@ -140,23 +142,22 @@ router.delete("/deletetask", fetchUser, async (req, res) => {
     const id = user.id;
     try {
         const user = await SignIn.findById(id);
-
-        console.log(user);
         if (!user) {
             catchMessage(res, "You are not authorised to do this task", 401, "");
             return;
         }
-
         const taskId = req.query.taskid;
-        if (!taskId) {
-            catchMessage(res, "Please provide a task id", 404, "");
-            return;
+        console.log(taskId);
+        const taskIndex = user.Task.findIndex(task => task.id === taskId);
+
+        if (taskIndex === -1) {
+            return res.status(404).json({ success: false, message: "Task not found" });
         }
-        user.Task.pop(user.Task.id(taskId));
 
-
+        user.Task.splice(taskIndex, 1);
         await user.save();
-        res.status(201).send({ success: true, message: "Task Updated Successfully" });
+
+        return res.json({ success: true, message: 'Task deleted successfully' });
 
     } catch (error) {
         catchMessage(res, "Server side error ", 500, error);

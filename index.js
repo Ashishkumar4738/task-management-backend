@@ -8,24 +8,17 @@ const app = express();
 
 // * middlewares
 app.use(express.json());
-const corsOptions = {
-    origin: 'https://task-management-frontend-opal.vercel.app',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
-  };
-  
-//   app.use(cors());
-  app.use(cors(corsOptions));
-app.use(express.urlencoded({extended:false}));
+app.use(cors());
+app.use(express.urlencoded({ extended: false }));
 
 // * routes
-app.use("/auth",login);
-app.use("/task",createtask);
+app.use("/auth", login);
+app.use("/task", createtask);
 
-app.get("/",(req,res)=>{
+app.get("/", (req, res) => {
     res.send("Welcome to updated api");
 })
 
-app.listen((port),(req,res)=>{
+app.listen((port), (req, res) => {
     console.log(`server started at port ${port} `);
 })

@@ -64,7 +64,6 @@ router.post("/signup",
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             // Return validation errors if there are any
-            console.log(errors.errors);
             return res.status(400).json({ errors: errors.errors });
         }
         try {
@@ -102,7 +101,6 @@ router.post("/signup",
                 { success: true, message: "Your account is created successfully", jwtToken });
 
         } catch (error) {
-            console.log(error);
             catchMessage(res, "Server side Error while signin", 500, error);
         }
     });

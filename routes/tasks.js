@@ -88,7 +88,6 @@ router.get("/fetchbyid", fetchUser, async (req, res) => {
             return;
         }
 
-        console.log(task);
         res.status(201).send({ success: true, message: "Task found successfully", task });
 
 
@@ -151,7 +150,6 @@ router.delete("/deletetask", fetchUser, async (req, res) => {
             return;
         }
         const taskId = req.query.taskid;
-        console.log(taskId);
         const taskIndex = user.Task.findIndex(task => task.id === taskId);
 
         if (taskIndex === -1) {

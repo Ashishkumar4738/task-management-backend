@@ -9,8 +9,12 @@ import { body, validationResult } from "express-validator";
 const router = express.Router();
 
 router.post("/signin",
-    body("email").isEmail(),
-    body("password").isLength({ min: 6, message: "password should be minimum 6 length long" }),
+    body("email")
+        .isEmail()
+        .withMessage('Email is not valid'),
+    body("password")
+        .isLength({ min: 6 })
+        .withMessage('password should be minimum 6 length long'),
     async (req, res) => {
 
         const errors = validationResult(req);
@@ -38,7 +42,7 @@ router.post("/signin",
                 };
                 const jwtToken = jwt.sign(data, process.env.JWT_SECRET);
                 res.status(201).send(
-                    {success:true, message: "Account found successfully", jwtToken, name:user.name}
+                    { success: true, message: "Account found successfully", jwtToken, name: user.name }
                 )
             }
         } catch (error) {
@@ -47,10 +51,15 @@ router.post("/signin",
     });
 
 
-router.post("/signup", 
-    body("email").isEmail(),
-    body("password").isLength({ min: 6, message: "password should be minimum 6 length long" }),
-    body("name").isLength({min:3,message:"name should have min 3 characters"}),
+router.post("/signup",
+    body("email")
+        .isEmail()
+        .withMessage('Email is not valid'),
+    body("password")
+        .isLength({ min: 6 })
+        .withMessage('password should be minimum 6 length long'),
+    body("name").isLength({ min: 3 })
+        .withMessage('name should have min 3 characters'),
     async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

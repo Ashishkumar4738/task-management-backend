@@ -3,6 +3,7 @@ import cors from "cors";
 import db from "./db/db.js";
 import login from "./routes/auth.js"
 import createtask from "./routes/tasks.js"
+const port = process.env.PORT || 5000;
 const app = express();
 
 // * middlewares
@@ -18,6 +19,6 @@ app.get("/",(req,res)=>{
     res.send("Welcome to api");
 })
 
-app.listen((process.env.PORT || 5000),(req,res)=>{
-    console.log(`server started at port ${process.env.PORT||5000} `);
+app.listen((port),(req,res)=>{
+    console.log(`server started at port ${port} `);
 })

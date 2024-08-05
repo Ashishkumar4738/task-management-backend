@@ -8,9 +8,13 @@ const router = express.Router();
 
 
 router.post("/createtask",
-    body("title").isLength({ min: 3, message: "title minimum length should be 3" }),
-    body("description").isLength({ min: 10, message: "description minimun length should be 10" }),
-    body("dueStatus").notEmpty(), fetchUser, async (req, res) => {
+    body("title").isLength({ min: 3})
+    .withMessage('title minimum length should be 3'),
+    body("description").isLength({ min: 10})
+    .withMessage('description minimun length should be 10'),
+    body("dueStatus").notEmpty()
+    .withMessage("Due Status can't be empty"),
+    fetchUser, async (req, res) => {
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {

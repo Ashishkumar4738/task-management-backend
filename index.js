@@ -16,7 +16,7 @@ app.use("/auth",login);
 app.use("/task",createtask);
 
 app.get("/",(req,res)=>{
-    res.send("Welcome to api");
+    res.send("Welcome to updated api");
 })
 
 app.listen((port),(req,res)=>{

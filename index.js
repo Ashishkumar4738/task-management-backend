@@ -17,8 +17,8 @@ app.use("/task", createtask);
 
 app.get("/", (req, res) => {
     res.send("Welcome to updated api");
-})
+});
 
 app.listen((port), (req, res) => {
     console.log(`server started at port ${port} `);
-})
+});

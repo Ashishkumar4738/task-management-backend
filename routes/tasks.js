@@ -167,5 +167,4 @@ router.delete("/deletetask", fetchUser, async (req, res) => {
     }
 });
 
-
 export default router;

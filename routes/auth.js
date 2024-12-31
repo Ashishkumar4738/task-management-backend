@@ -12,6 +12,7 @@ const router = express.Router();
 
 // patch for partial updates
 // put for full updates
+
 router.post("/sendmail", async (req, res) => {
   const otp = Math.floor(100000 + Math.random() * 900000);
   const mail = req.body.email;
@@ -51,15 +52,11 @@ router.post("/sendmail", async (req, res) => {
   transporter.sendMail(mailOptions, async function (error, info) {
     if (error) {
       console.log("Error when sending mail", error);
-      res.status(402).send("Undable to send mail");
+      res.status(500).send("Unable to send mail");
+
     } else {
       await redis.set(mail, otp, 'EX', 600); 
-      const number = redis.get(mail);
-      console.log("redis ",number);
-      
-      res
-        .status(201)
-        .send({ status: true, message: "Mail send successfully!" });
+      res.status(201).send({ status: true, message: "Mail sent successfully!" });
     }
   });
 });

@@ -15,6 +15,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use("/auth", login);
 app.use("/task", createtask);
 
+
+
 app.get("/", (req, res) => {
     res.send("Welcome to updated api");
 });
